@@ -9,11 +9,11 @@ function Login() {
     
     <div className='p-5 mx-auto max-w-5xl min-h-[540px] flex justify-between max-md:flex-col'>
         
-        <div className="flex flex-col basis-3/5 gap-4 mt-20">
+        <div className="flex flex-col max-md:items-center max-md:text-center basis-3/5 gap-4 mt-20">
         <div className="text-4xl">
             <FacebookTitle />
         </div>
-        <h2 className='mt-3 text-[30px] leading-8 w-[514px]'>
+        <h2 className='mt-3 text-[30px] max-md:text-[28px] leading-8 w-[514px]'>
             Fakebook helps you connect and share with the people in your life.
         </h2>
         </div>
