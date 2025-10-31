@@ -8,9 +8,9 @@ import { toast } from 'react-toastify'
 function RegisterForm({resetForm}) {
     const {handleSubmit,register,formState,reset} = useForm({
         resolver: zodResolver(registerSchema),
+        //คล้าย onchange
         // mode:'onBlur'
         mode:'onSubmit' 
-        //คล้าย onchange
     })
     const {isSubmitting,errors} = formState
     useEffect(()=>{reset()},[resetForm])

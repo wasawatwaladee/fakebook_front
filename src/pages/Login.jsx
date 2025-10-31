@@ -2,13 +2,38 @@ import { useState } from 'react'
 import { FacebookTitle } from '../icons'
 import RegisterForm from './RegisterForm'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { loginSchema } from '../validation/schema'
+import axios from 'axios'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
+
 function Login() {
 const [resetForm,setResetForm] = useState(true)
+ const {handleSubmit,register,formState,reset} = useForm({
+        resolver: zodResolver(loginSchema),
+        // mode:'onBlur'
+        mode:'onSubmit' 
+        //คล้าย onchange
+    })
 
-  const hdlClose = () =>{
-    setResetForm(prv=>!prv) //setResetForm(!resetForm)
-    console.log('Register form close')
-  }
+    const {isSubmitting,errors} = formState
+    
+    //setResetForm(!resetForm)
+    const hdlClose = () =>{setResetForm(prv=>!prv) }
+    
+    const onSubmit = async data =>{
+      // alert(JSON.stringify(data,null,2))
+      try {
+        const resp = await axios.post('http://localhost:8899/api/auth/login',data)
+        toast.success(resp.data.message)
+        toast.info(JSON.stringify(resp.data,null,2))
+      } catch (err) {
+        const errMsg = err.response?.data.message || err.message
+        toast.error(errMsg)        
+      }
+    }
   
   return (
   <>
@@ -28,10 +53,19 @@ const [resetForm,setResetForm] = useState(true)
 
         <div className="flex flex-1">
             <div className="card bg-base-100 w-full h-[350px] shadow-xl mt-8">
-                <form onSubmit={e=>e.preventDefault()}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="card-body gap-3 p-4">
-                        <input type="text" className='input w-full' placeholder='E-mail or Phone number'/>
-                        <input type="password" className='input w-full' placeholder='password'/>
+                      
+                      <div className="w-full">
+                        <input type="text" className='input w-full' placeholder='E-mail or Phone number'{...register('identity')} />
+                        <p className='text-sm  text-error'>{errors.identity?.message}</p>
+                      </div>
+                        
+                        <div className="w-full">
+                        <input type="password" className='input w-full' placeholder='password' {...register('password')}/>
+                        <p className='text-sm  text-error'>{errors.password?.message}</p>
+                        </div>
+                        
                         <button className='btn btn-primary text-xl'>Login</button>
                         <p className='text-center cursor-pointer opacity-75'>Forgotten password?</p>
                         <div className="divider"></div>
