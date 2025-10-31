@@ -8,9 +8,12 @@ import { loginSchema } from '../validation/schema'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { authApi } from '../api/authApi'
+import useUserStore from '../stores/userStore'
 
 function Login() {
-const [resetForm,setResetForm] = useState(true)
+ const login = useUserStore(state=>state.login)
+ const [resetForm,setResetForm] = useState(true)
  const {handleSubmit,register,formState,reset} = useForm({
         resolver: zodResolver(loginSchema),
         // mode:'onBlur'
@@ -26,9 +29,11 @@ const [resetForm,setResetForm] = useState(true)
     const onSubmit = async data =>{
       // alert(JSON.stringify(data,null,2))
       try {
-        const resp = await axios.post('http://localhost:8899/api/auth/login',data)
-        toast.success(resp.data.message)
-        toast.info(JSON.stringify(resp.data,null,2))
+        await new Promise(resolve=>setTimeout(resolve,1000))
+        login(data)
+        // const resp = await authApi.post('/login',data)
+        // toast.success(resp.data.message)
+        // toast.info(JSON.stringify(resp.data,null,2))
       } catch (err) {
         const errMsg = err.response?.data.message || err.message
         toast.error(errMsg)        
@@ -54,6 +59,7 @@ const [resetForm,setResetForm] = useState(true)
         <div className="flex flex-1">
             <div className="card bg-base-100 w-full h-[350px] shadow-xl mt-8">
                 <form onSubmit={handleSubmit(onSubmit)}>
+                  <fieldset disabled={isSubmitting}>
                     <div className="card-body gap-3 p-4">
                       
                       <div className="w-full">
@@ -66,13 +72,17 @@ const [resetForm,setResetForm] = useState(true)
                         <p className='text-sm  text-error'>{errors.password?.message}</p>
                         </div>
                         
-                        <button className='btn btn-primary text-xl'>Login</button>
+                        <button className='btn btn-primary text-xl'>
+                          Login
+                           {isSubmitting && <span className="loading loading-spinner loading-sm"></span>}
+                          </button>
                         <p className='text-center cursor-pointer opacity-75'>Forgotten password?</p>
                         <div className="divider"></div>
                         <button className='btn btn-secondary'
                         onClick={()=>document.getElementById('register-form').showModal()}
                         >Create new account</button>
                     </div>
+                  </fieldset>
                 </form>
             </div>
         </div>
