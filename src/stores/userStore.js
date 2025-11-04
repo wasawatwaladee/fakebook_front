@@ -3,7 +3,7 @@ import { createJSONStorage,persist } from "zustand/middleware";
 import { authApi } from "../api/authApi";
 
 
-const useUserStore = create((set,get)=>({
+const useUserStore = create(persist((set,get)=>({
     user:null,
     token:'',
     login:async (input)=>{
@@ -14,6 +14,9 @@ const useUserStore = create((set,get)=>({
         return resp
     },
     logout: ()=> set({token:'',user:null})
+}),{
+    name:'userState',
+    storage:createJSONStorage(()=>localStorage)
 }))
 
 export default useUserStore;

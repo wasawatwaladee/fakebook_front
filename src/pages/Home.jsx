@@ -1,8 +1,14 @@
-import React from 'react'
+import PostContainer from "../components/PostContainer"
+import SidebarContact from "../components/SidebarContact"
+import SidebarMenu from "../components/SidebarMenu"
 
 function Home() {
   return (
-    <div>Home</div>
+   <>
+   <SidebarMenu />
+   <PostContainer />
+   <SidebarContact />
+   </>
   )
 }
 
