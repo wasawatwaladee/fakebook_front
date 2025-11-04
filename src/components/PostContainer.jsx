@@ -21,7 +21,7 @@ function PostContainer() {
     <div className="w-[680px] mx-auto min-h-screen my-3 flex flex-col gap-4 rounded-lg">
         <CreatePost />
         {JSON.stringify(posts,null,2)}
-        {/* {allPosts.map(post=>(
+        {/* {posts.map(post=>(
             <div key={post.id} className="card">
                 <div className="card-body">
                     <p>{post.user.firstName} {post.user.lastName}</p>

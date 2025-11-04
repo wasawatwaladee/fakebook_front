@@ -6,14 +6,14 @@ const usePostStore = create((set,get)=>({
     posts:[],
     currentPosts:null,
     createPost: async(body)=>{
-        const resp = await createPost(body,useUserStore.getState().token)
+        const resp = await createPost(body)
         console.log('resp.data', resp.data)
         // set({posts:resp.data.result})
         get().getAllPosts()
         return resp
     },
     getAllPosts: async()=>{
-        const resp = await getAllPosts(useUserStore.getState().token)
+        const resp = await getAllPosts()
         set({posts:resp.data.posts})
         return resp
     }
