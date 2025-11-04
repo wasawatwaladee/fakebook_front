@@ -14,7 +14,6 @@ function PostForm() {
   const user = useUserStore(state=>state.user)
   const token = useUserStore(state=>state.token)
   const createPost = usePostStore(state=>state.createPost)
-  const getAllPosts = usePostStore(state=>state.getAllPosts)
   console.log('token', token)
   const [addPic,setAddPic] = useState(false)
   const [file,setFile] = useState(null)
@@ -43,7 +42,7 @@ function PostForm() {
 
     const resp = await createPost(body)
 
-    // toast.success(resp.data.message)
+    toast.success(resp.data.message)
     setLoading(false)
     document.getElementById('postform-modal').close()
 
@@ -54,7 +53,7 @@ function PostForm() {
     // getAllPosts(token)
    } catch (err) {
     console.log(err)
-    const errMsg = err.response?.data?.error || err.message
+    const errMsg = err.response?.data?.error.message || err.message
     toast.error(errMsg)
     setLoading(false)
    }finally{
@@ -83,7 +82,8 @@ function PostForm() {
         </div>    
         
         <textarea onChange={e=>setMessage(e.target.value)} className="textarea textarea-ghost w-full"
-        placeholder={`what do you think ${user.firstName}`} value={message}>
+        placeholder={`what do you think ${user.firstName}`} value={message}
+        rows={message.split('\n').length}>
         </textarea>
 
         {addPic && <AddPicture file={file} setFile={setFile} />}
@@ -95,7 +95,8 @@ function PostForm() {
                 <PhotoIcon2 className='w-7'/>
             </div>
         </div>
-        <button disabled={loading} onClick={hdlCreatePost} className="btn btn-sm btn-primary" >
+        <button disabled={loading || !message.trim() && !file} onClick={hdlCreatePost}
+         className="btn btn-sm btn-primary" >
             Create Post
         {loading && <span className="loading loading-spinner loading-sm"></span>}
         </button>
